@@ -1,7 +1,9 @@
 {
-    "name": "Depra.Template.Editor",
-    "rootNamespace": "Depra.Template.Editor",
-    "references": [],
+    "name": "Depra.CodeGraph.Editor",
+    "rootNamespace": "Depra.CodeGraph",
+    "references": [
+        "GUID:8d016b06b46314f4ebf12baac2d9d519"
+    ],
     "includePlatforms": [
         "Editor"
     ],
@@ -11,5 +13,6 @@
     "precompiledReferences": [],
     "autoReferenced": true,
     "defineConstraints": [],
-    "versionDefines": []
+    "versionDefines": [],
+    "noEngineReferences": false
 }

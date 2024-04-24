@@ -1,6 +1,6 @@
 {
-    "name": "Depra.Template",
-    "rootNamespace": "Depra.Template",
+    "name": "Depra.CodeGraph",
+    "rootNamespace": "Depra.CodeGraph",
     "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
@@ -9,5 +9,6 @@
     "precompiledReferences": [],
     "autoReferenced": true,
     "defineConstraints": [],
-    "versionDefines": []
+    "versionDefines": [],
+    "noEngineReferences": false
 }
