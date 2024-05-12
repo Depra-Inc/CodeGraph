@@ -87,12 +87,42 @@ namespace Depra.CodeGraph.Editor.View
 			Bind();
 		}
 
+		internal void RemoveNode(CodeGraphEditorNode editorNode)
+		{
+			Undo.RecordObject(_serializedObject.targetObject, "Removed Node");
+
+			_nodes.Remove(editorNode);
+			_tree.Nodes.Remove(editorNode.Node);
+			_nodeLookup.Remove(editorNode.Node.Guid);
+			_serializedObject.Update();
+		}
+
 		private void PopulateNodes(IEnumerable<CodeGraphNode> graphNodes)
 		{
 			foreach (var node in graphNodes)
 			{
 				AddNode(node);
 			}
+		}
+
+		internal void RemoveConnection(Edge edge)
+		{
+			if (_edgeLookup.Remove(edge, out var connection))
+			{
+				_tree.Connections.Remove(connection);
+			}
+		}
+
+		internal void CreateEdge(Edge edge)
+		{
+			var inputNode = (CodeGraphEditorNode) edge.input.node;
+			var outputNode = (CodeGraphEditorNode) edge.output.node;
+
+			var inputIndex = inputNode.Ports.IndexOf(edge.input);
+			var outputIndex = outputNode.Ports.IndexOf(edge.output);
+
+			var connection = new CodeGraphConnection(inputNode.Id, inputIndex, outputNode.Id, outputIndex);
+			_tree.Connections.Add(connection);
 		}
 
 		private void PopulateConnections(IEnumerable<CodeGraphConnection> connections)
@@ -133,24 +163,6 @@ namespace Depra.CodeGraph.Editor.View
 			AddElement(editorNode);
 		}
 
-		internal void RemoveNode(CodeGraphEditorNode editorNode)
-		{
-			Undo.RecordObject(_serializedObject.targetObject, "Removed Node");
-
-			_nodes.Remove(editorNode);
-			_tree.Nodes.Remove(editorNode.Node);
-			_nodeLookup.Remove(editorNode.Node.Guid);
-			_serializedObject.Update();
-		}
-
-		internal void RemoveConnection(Edge edge)
-		{
-			if (_edgeLookup.Remove(edge, out var connection))
-			{
-				_tree.Connections.Remove(connection);
-			}
-		}
-
 		private void AddGridBackground()
 		{
 			var grid = new GridBackground();
@@ -165,18 +177,6 @@ namespace Depra.CodeGraph.Editor.View
 			var assetPath = AssetDatabase.GUIDToAssetPath(styleSheetGuid);
 			var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(assetPath);
 			styleSheets.Add(styleSheet);
-		}
-
-		internal void CreateEdge(Edge edge)
-		{
-			var inputNode = (CodeGraphEditorNode) edge.input.node;
-			var outputNode = (CodeGraphEditorNode) edge.output.node;
-
-			var inputIndex = inputNode.Ports.IndexOf(edge.input);
-			var outputIndex = outputNode.Ports.IndexOf(edge.output);
-
-			var connection = new CodeGraphConnection(inputNode.Id, inputIndex, outputNode.Id, outputIndex);
-			_tree.Connections.Add(connection);
 		}
 
 		private void Bind()
